@@ -7,9 +7,12 @@ using System.Web.Http;
 
 namespace WebApplication1.Controllers
 {
+    [RoutePrefix("customers")]
     public class ValuesController : ApiController
     {
-        // GET api/values
+        
+        // using defined route prefix
+        [HttpGet, Route("all")]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
