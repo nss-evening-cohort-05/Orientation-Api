@@ -6,15 +6,34 @@ using System.Linq;
 using System.Web;
 using Dapper;
 using WebApplication1.Models;
+using System.Web;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using Dapper;
+using WebApplication1.Models;
 
 namespace WebApplication1.DataAccess
 {
      public class CustomerDataAccess : IRepository<CustomerListResult>
 		{
-            /*public List<int> GetAll()
+ 
+        public List<CustomerListResult> GetAll()
+        {
+            using (var connection =
+                   new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+
             {
-                throw new NotImplementedException();
-            }*/
+
+                connection.Open();
+
+                var result = connection.Query< CustomerListResult>
+                                              ("select * from Customer");
+
+                return result.ToList();
+            }
+        }
+          
 			public void Update(CustomerListResult customer)
 			{
 				using (var connection =
@@ -32,7 +51,7 @@ namespace WebApplication1.DataAccess
 
     public interface IRepository<T>
     {
-       /* List<T> GetAll();*/
+        List<T> GetAll();
 		void Update(T customer);
 	}
 }

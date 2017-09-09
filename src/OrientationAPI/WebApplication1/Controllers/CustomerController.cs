@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,6 +16,22 @@ namespace WebApplication1.Controllers
 	[RoutePrefix("api/customer")]
 	public class CustomerController : ApiController
     {
+        //customers
+        [HttpGet, Route("all")]
+        public HttpResponseMessage Get()
+        {
+            try
+            {
+                var customerData = new CustomerDataAccess();
+                var customers = customerData.GetAll();
+
+                return Request.CreateResponse(HttpStatusCode.OK, customers);
+            }
+            catch (Exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query didn't work ...");
+            }
+        }
 		[HttpPut, Route("edit")]
 		public HttpResponseMessage Put(CustomerListResult customer)
 		{
@@ -37,3 +54,5 @@ namespace WebApplication1.Controllers
 		}
 	}
 }
+
+
