@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Net;
+using Dapper;
+using Orientation_Api.Models;
+
+namespace Orientation_Api.DataAccess
+{
+    public class CustomerDataAccess
+    {
+        //------------------------------------------------------------------------
+        //get all the customer data
+        public List<Customer> GetAllCustomers()
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                Connection.Open();
+                var result = Connection.Query<Customer>("select * from Customer");
+                return result.ToList();
+            }
+        }
+        //------------------------------------------------------------------------
+        //update the customer state to be Inactive by passing the customerId
+        public void CustomerInactive(int CustomerId)
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                Connection.Open();
+                var Result = Connection.Execute("update Customer set Active = 'false' where CustomerId = @Id",
+                                                  new { Id = CustomerId });
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        public int CustomerUpdateLastName(int CustomerId, string LastName)
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                connection.Open();
+
+
+               return connection.Execute("update Customer " +
+                                                "set LastName = @LastName " +
+                                                "where CustomerId = @CustomerId",
+                                       new { LastName = LastName, CustomerId = CustomerId });
+
+            }
+        }
+    }
+}
