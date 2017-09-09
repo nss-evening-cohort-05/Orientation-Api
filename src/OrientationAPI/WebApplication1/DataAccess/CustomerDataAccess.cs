@@ -15,7 +15,7 @@ namespace WebApplication1.DataAccess
 {
      public class CustomerDataAccess : IRepository<CustomerListResult>
 		{
- 
+
         public List<CustomerListResult> GetAll()
         {
             using (var connection =
@@ -25,10 +25,11 @@ namespace WebApplication1.DataAccess
 
                 connection.Open();
 
-                var result = connection.Query< CustomerListResult>
+                var result = connection.Query<CustomerListResult>
                                               ("select * from Customer");
 
                 return result.ToList();
+            }
         }
 
         public bool InactivateCustomer(int entitytoUpdate)
@@ -47,6 +48,7 @@ namespace WebApplication1.DataAccess
                     return false;
 
             }
+        }
           
 			public void Update(CustomerListResult customer)
 			{
@@ -63,7 +65,6 @@ namespace WebApplication1.DataAccess
 
         }
 
-    }
 
     public interface IRepository<T>
     {
