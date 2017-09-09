@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using WebApplication1.Models;
+using Dapper;
 
 
 namespace WebApplication1.DataAccess
