@@ -49,20 +49,20 @@ namespace Orientation_Api.Controllers
     //--------------------------------------------------------------------------
         // change the customer state to InActive
         // PUT api/<controller>/5
-        [HttpPut, Route("{Id}")]
+        [HttpPut, Route("InActive/{Id}")]
         public HttpResponseMessage Put(int Id)
         {
             try
             {
-                var UpdatingStatus = new CustomerDataAccess();
-                var UpdatedRows = UpdatingStatus.CustomerInactive(Id);
+                var InActiveCustomer = new CustomerDataAccess();
+                var UpdatedRows = InActiveCustomer.CustomerInactive(Id);
                 if (UpdatedRows == 0)
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Customer with the Id {Id} was not found");
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK , "Updated");
+                    return Request.CreateResponse(HttpStatusCode.OK , $"Customer with the Id {Id} is Now INACTIVE ");
                 }
             }
             catch (Exception ex)
@@ -72,7 +72,34 @@ namespace Orientation_Api.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
-//----------------------------------------------------
+
+    //--------------------------------------------------------
+        // change the customer state back to Active
+        // PUT api/<controller>/5
+        [HttpPut, Route("Active/{Id}")]
+        public HttpResponseMessage Put2(int Id)
+        {
+            try
+            {
+                var ActiveCustomer = new CustomerDataAccess();
+                var UpdatedRows = ActiveCustomer.CustomerActive(Id);
+                if (UpdatedRows == 0)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Customer with the Id {Id} was not found");
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, $"Customer with the Id {Id} is Now Active");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
+        //----------------------------------------------------
         // DELETE api/<controller>/5
         public void Delete(int id)
         {

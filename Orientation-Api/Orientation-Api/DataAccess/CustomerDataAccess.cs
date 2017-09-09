@@ -23,7 +23,7 @@ namespace Orientation_Api.DataAccess
             }
         }
     //------------------------------------------------------------------------
-        //update the customer state to be Inactive by passing the customerId
+        //update the customer state to be InActive by passing the customerId
         public int CustomerInactive(int CustomerId)
         {
              using ( var Connection = new SqlConnection (ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
@@ -34,6 +34,17 @@ namespace Orientation_Api.DataAccess
                 return Result;
              }
         }
-    //--------------------------------------------------------------------------
+        //--------------------------------------------------------------------------
+        //update the customer state to be Active by passing the customerId
+        public int CustomerActive(int CustomerId)
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                Connection.Open();
+                var Result = Connection.Execute("update Customer set Active = 'true' where CustomerId = @Id",
+                                                  new { Id = CustomerId });
+                return Result;
+            }
+        }
     }
 }
