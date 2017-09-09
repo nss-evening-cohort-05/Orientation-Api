@@ -50,19 +50,26 @@ namespace Orientation_Api.Controllers
         // change the customer state to InActive
         // PUT api/<controller>/5
         [HttpPut, Route("{Id}")]
-        public void Put(int id)
+        public HttpResponseMessage Put(int Id)
         {
             try
             {
                 var UpdatingStatus = new CustomerDataAccess();
-                UpdatingStatus.CustomerInactive(id);
-                 Request.CreateResponse(HttpStatusCode.OK);
+                var UpdatedRows = UpdatingStatus.CustomerInactive(Id);
+                if (UpdatedRows == 0)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Customer with the Id {Id} was not found");
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK , "Updated");
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
-                 Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
 //----------------------------------------------------

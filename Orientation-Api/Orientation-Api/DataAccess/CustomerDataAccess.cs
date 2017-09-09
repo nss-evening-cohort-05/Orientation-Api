@@ -24,13 +24,14 @@ namespace Orientation_Api.DataAccess
         }
     //------------------------------------------------------------------------
         //update the customer state to be Inactive by passing the customerId
-        public void CustomerInactive(int CustomerId)
+        public int CustomerInactive(int CustomerId)
         {
              using ( var Connection = new SqlConnection (ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
              {
                 Connection.Open();
                 var Result = Connection.Execute("update Customer set Active = 'false' where CustomerId = @Id",
                                                   new { Id = CustomerId });
+                return Result;
              }
         }
     //--------------------------------------------------------------------------
