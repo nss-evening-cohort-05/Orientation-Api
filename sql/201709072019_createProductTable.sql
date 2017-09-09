@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[Product](
 	[ProductId] [int] IDENTITY(1,1) NOT NULL,
 	[ProductName] [varchar](40) NOT NULL,
 	[ProductDescription] [varchar](40) NOT NULL,
-	[ProductPrice] [int] NOT NULL,
+	[ProductPrice] [money] NOT NULL,
  CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED 
 (
 	[ProductId] ASC
