@@ -58,7 +58,6 @@ namespace Orientation_Api.Controllers
                 UpdatingStatus.CustomerInactive(id);
                  Request.CreateResponse(HttpStatusCode.OK);
             }
-
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -66,7 +65,6 @@ namespace Orientation_Api.Controllers
                  Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
-
 //----------------------------------------------------
         // DELETE api/<controller>/5
         public void Delete(int id)

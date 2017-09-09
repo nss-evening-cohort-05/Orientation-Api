@@ -13,12 +13,12 @@ namespace Orientation_Api.DataAccess
     {
     //------------------------------------------------------------------------
         //get all the customer data
-        public List<CustomerList> GetAllCustomers()
+        public List<Customer> GetAllCustomers()
         {
             using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
             {
                 Connection.Open();
-                var result = Connection.Query<CustomerList>("select * from Customer");
+                var result = Connection.Query<Customer>("select * from Customer where Active = 1");
                 return result.ToList();
             }
         }
