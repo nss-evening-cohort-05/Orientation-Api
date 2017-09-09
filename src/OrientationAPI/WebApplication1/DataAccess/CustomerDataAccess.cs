@@ -33,8 +33,26 @@ namespace WebApplication1.DataAccess
                 return result.ToList();
             }
         }
-          
-			public void Update(CustomerListResult customer)
+
+        public void Add(CustomerListResult customer)
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                connection.Open();
+
+                var result = connection.QueryFirstOrDefault<CustomerListResult>(
+                    "INSERT into Customer @customer",
+                    new
+                    {
+                        id = customer.CustomerId,
+                        firstName = customer.FirstName,
+                        lastName = customer.LastName
+                    });
+
+            }
+        }
+
+        public void Update(CustomerListResult customer)
 			{
 				using (var connection =
 				new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))

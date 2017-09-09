@@ -32,7 +32,27 @@ namespace WebApplication1.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query didn't work ...");
             }
         }
-		[HttpPut, Route("edit")]
+        [HttpPut, Route("add")]
+        public HttpResponseMessage Post(CustomerListResult customer)
+        {
+            using (var connection =
+                new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                try
+                {
+                    var customerData = new CustomerDataAccess();
+                    //customerData.Add(customer);
+                    return Request.CreateResponse(HttpStatusCode.Accepted);
+
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+
+                }
+            }
+        }
+        [HttpPut, Route("edit")]
 		public HttpResponseMessage Put(CustomerListResult customer)
 		{
 			using (var connection =
