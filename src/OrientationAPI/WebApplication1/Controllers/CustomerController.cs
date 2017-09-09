@@ -9,17 +9,18 @@ using System.Web.Http;
 using Dapper;
 using WebApplication1.DataAccess;
 using WebApplication1.Models;
-using System.Web.Mvc;
+//using System.Web.Mvc;
 
 namespace WebApplication1.Controllers
 {
-    //customers
-    //[RoutePrefix("customers")]
+    //customer
+    [RoutePrefix("customer")]
     public class CustomerController : ApiController
     {
         //public object Request { get; private set; }
 
         //customers
+        [HttpGet, Route("all")]
         public HttpResponseMessage Get()
         {
             try
