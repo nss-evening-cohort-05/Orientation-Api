@@ -10,35 +10,37 @@ using Dapper;
 
 namespace WebApplication1.DataAccess
 {
-    public class CustomerDataAccess
+    public class CustomerDataAccess : IRepository<CustomerListResult>
     {
-        public class IntRepository : IRepository<int>
+
+        public List<CustomerListResult> GetAll()
         {
-            public List<int> GetAll()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void InactivateCustomer(int entitytoUpdate)
-            {
-                var newStatus = 0;
-                using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
-                {
-                    connection.Open();
-
-                    var result = connection.QueryFirstOrDefault<CustomerListResult>(
-                        "Update Customer set Active = @newStatus Where CustomerId = @CustomerId",
-                        new { CustomerId = @entitytoUpdate, Active = @newStatus });
-
-                }
-            }
-
+            throw new NotImplementedException();
         }
+
+        public bool InactivateCustomer(int entitytoUpdate)
+        {
+            var newStatus = 0;
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                connection.Open();
+
+                var successful = connection.Execute("Update Customer set Active = @Active Where CustomerId = @CustomerId",
+                    new { CustomerId = entitytoUpdate, Active = newStatus });
+
+                if (successful == 1)
+                    return true;
+                else
+                    return false;
+
+            }
+        }
+
     }
 
     public interface IRepository<T>
     {
         List<T> GetAll();
-        void InactivateCustomer(T entityToUpdate);
+        bool InactivateCustomer(int entityToUpdate);
     }
 }
