@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,19 +7,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Dapper;
 using WebApplication1.DataAccess;
 using WebApplication1.Models;
-//using System.Web.Mvc;
+using Dapper;
 
 namespace WebApplication1.Controllers
 {
-    //customer
-    [RoutePrefix("customer")]
-    public class CustomerController : ApiController
+	[RoutePrefix("api/customer")]
+	public class CustomerController : ApiController
     {
-        //public object Request { get; private set; }
-
         //customers
         [HttpGet, Route("all")]
         public HttpResponseMessage Get()
@@ -35,5 +32,27 @@ namespace WebApplication1.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query didn't work ...");
             }
         }
-    }
+		[HttpPut, Route("edit")]
+		public HttpResponseMessage Put(CustomerListResult customer)
+		{
+			using (var connection =
+				new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+			{
+				try
+				{
+					var customerData = new CustomerDataAccess();
+					customerData.Update(customer);
+					return Request.CreateResponse(HttpStatusCode.Accepted);
+
+				}
+				catch (Exception ex)
+				{
+					return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+
+				}
+			}
+		}
+	}
 }
+
+
