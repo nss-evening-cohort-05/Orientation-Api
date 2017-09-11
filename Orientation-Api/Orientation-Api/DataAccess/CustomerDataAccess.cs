@@ -11,7 +11,6 @@ namespace Orientation_Api.DataAccess
 {
     public class CustomerDataAccess
     {
-
         //get all the customer data
         public List<Customer> GetAllCustomers()
         {
@@ -41,6 +40,23 @@ namespace Orientation_Api.DataAccess
             using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
             {
                 Connection.Open();
+                var Result = Connection.Execute("update Customer set Active = 'false' where CustomerId = @Id",
+                                                  new { Id = CustomerId });
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        public int CustomerUpdateLastName(int CustomerId, string LastName)
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                connection.Open();
+
+
+               return connection.Execute("update Customer " +
+                                                "set LastName = @LastName " +
+                                                "where CustomerId = @CustomerId",
+                                       new { LastName = LastName, CustomerId = CustomerId });
                 var Result = Connection.Execute("update Customer set Active = 'true' where CustomerId = @Id",
                                                   new { Id = CustomerId });
                 return Result;
