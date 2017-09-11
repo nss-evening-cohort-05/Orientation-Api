@@ -40,9 +40,10 @@ namespace Orientation_Api.DataAccess
             using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
             {
                 Connection.Open();
-                var Result = Connection.Execute("update Customer set Active = 'false' where CustomerId = @Id",
+                return Connection.Execute("update Customer set Active = 'false' where CustomerId = @Id",
                                                   new { Id = CustomerId });
             }
+
         }
         //--------------------------------------------------------------------------
 
@@ -57,9 +58,7 @@ namespace Orientation_Api.DataAccess
                                                 "set LastName = @LastName " +
                                                 "where CustomerId = @CustomerId",
                                        new { LastName = LastName, CustomerId = CustomerId });
-                var Result = Connection.Execute("update Customer set Active = 'true' where CustomerId = @Id",
-                                                  new { Id = CustomerId });
-                return Result;
+                
             }
         }
 
@@ -73,8 +72,7 @@ namespace Orientation_Api.DataAccess
                             Values (@FirstName, @LastName, @Address, @Active, @Telephone, @Email)";
 
                 Connection.Open();
-                return Connection.Execute(sql,
-                                                     new { FirstName = customer.FirstName,
+                return Connection.Execute(sql,  new { FirstName = customer.FirstName,
                                                         LastName = customer.LastName,
                                                         Address = customer.Address,
                                                         Active = customer.Active,

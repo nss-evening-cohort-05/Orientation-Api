@@ -26,9 +26,9 @@ namespace Orientation_Api.Controllers
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, order);
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error" , ex);
             }
 
         }
@@ -43,9 +43,9 @@ namespace Orientation_Api.Controllers
                 var orders =  orderDataAccess.listOrder();
                 return Request.CreateResponse(HttpStatusCode.OK, orders);
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error" , ex);
             }
 
         }
@@ -65,9 +65,9 @@ namespace Orientation_Api.Controllers
 
                 return Request.CreateResponse(HttpStatusCode.OK, orders);
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error" , ex);
             }
 
         }

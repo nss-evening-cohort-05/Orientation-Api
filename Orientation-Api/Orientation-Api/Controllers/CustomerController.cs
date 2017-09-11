@@ -34,12 +34,6 @@ namespace Orientation_Api.Controllers
             }
         }
 
-        // GET api/<controller>/5    
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         //--------------------------------------------------------------------------
         // PUT api/<controller>
         [HttpPut, Route("{Id}/LastName/{LastName}")]
@@ -64,17 +58,7 @@ namespace Orientation_Api.Controllers
             }
         }
 
-        //--------------------------------------------------------------------------
-        // change the customer state to InActive
-        // PUT api/<controller>/5
-        [HttpPut, Route("{Id}")]
-        public void Put(int id)
-        {
-            try
-            {
-                var UpdatingStatus = new CustomerDataAccess();
-                UpdatingStatus.CustomerInactive(id);
-                Request.CreateResponse(HttpStatusCode.OK);
+
          // POST api/<controller>
         [HttpPost, Route("NewCustomer")]
         public HttpResponseMessage AddNewCustomer(Customer customer)
@@ -82,12 +66,12 @@ namespace Orientation_Api.Controllers
             try
             {
                 var customerDataAccess = new CustomerDataAccess();
-                var rowUpdate = customerDataAccess.CustomerUpdateLastName(id, LastName);
+                var rowUpdate = customerDataAccess.NewCustomer(customer);
                 if (rowUpdate == 1)
-                    return Request.CreateResponse(HttpStatusCode.OK, "Last name update");
+                    return Request.CreateResponse(HttpStatusCode.OK, "New customer added ");
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "Not Found");
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Error Add new customer");
                 }
             }
 
@@ -98,25 +82,7 @@ namespace Orientation_Api.Controllers
             }
         }
 
-        //--------------------------------------------------------------------------
-        // change the customer state to InActive
-        // PUT api/<controller>/5
-        [HttpPut, Route("{Id}")]
-        public void Put(int id)
-        {
-            try
-            {
-                var UpdatingStatus = new CustomerDataAccess();
-                UpdatingStatus.CustomerInactive(id);
-                Request.CreateResponse(HttpStatusCode.OK);
-                var affectedRows = customerDataAccess.NewCustomer(customer);
-                return Request.CreateResponse(HttpStatusCode.Created, "New Customer Added!");
-            }
-            catch
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Could not add new customer.");
-            }
-        }
+        
 
         // change the customer state to InActive
         // PUT api/<controller>/5
