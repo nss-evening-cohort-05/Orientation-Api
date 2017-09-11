@@ -11,20 +11,31 @@ namespace Orientation_Api.DataAccess
 {
     public class CustomerDataAccess
     {
-        //------------------------------------------------------------------------
         //get all the customer data
         public List<Customer> GetAllCustomers()
         {
             using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
             {
                 Connection.Open();
-                var result = Connection.Query<Customer>("select * from Customer");
+                var result = Connection.Query<Customer>("select * from Customer where Active = 1");
                 return result.ToList();
             }
         }
-        //------------------------------------------------------------------------
-        //update the customer state to be Inactive by passing the customerId
-        public void CustomerInactive(int CustomerId)
+    //------------------------------------------------------------------------
+        //update the customer state to be InActive by passing the customerId
+        public int CustomerInactive(int CustomerId)
+        {
+             using ( var Connection = new SqlConnection (ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+             {
+                Connection.Open();
+                var Result = Connection.Execute("update Customer set Active = 'false' where CustomerId = @Id",
+                                                  new { Id = CustomerId });
+                return Result;
+             }
+        }
+        //--------------------------------------------------------------------------
+        //update the customer state to be Active by passing the customerId
+        public int CustomerActive(int CustomerId)
         {
             using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
             {
@@ -46,6 +57,29 @@ namespace Orientation_Api.DataAccess
                                                 "set LastName = @LastName " +
                                                 "where CustomerId = @CustomerId",
                                        new { LastName = LastName, CustomerId = CustomerId });
+                var Result = Connection.Execute("update Customer set Active = 'true' where CustomerId = @Id",
+                                                  new { Id = CustomerId });
+                return Result;
+            }
+        }
+
+        //--------------------------------------------------------------------------
+        public int NewCustomer(Customer customer)
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+
+                var sql = @"Insert into Customer (FirstName, LastName, Address, Active, Telephone, Email)
+                            Values (@FirstName, @LastName, @Address, @Active, @Telephone, @Email)";
+
+                Connection.Open();
+                return Connection.Execute(sql,
+                                                     new { FirstName = customer.FirstName,
+                                                        LastName = customer.LastName,
+                                                        Address = customer.Address,
+                                                        Active = customer.Active,
+                                                        Telephone = customer.Telephone,
+                                                        Email = customer.Email});
 
             }
         }
