@@ -3,8 +3,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using Orientation_Api.Areas.HelpPage.ModelDescriptions;
 using Orientation_Api.Areas.HelpPage.Models;
+using Orientation_Api.Areas.HelpPage;
 
-namespace Orientation_Api.Areas.HelpPage.Controllers
+namespace Orientation_Api.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.
