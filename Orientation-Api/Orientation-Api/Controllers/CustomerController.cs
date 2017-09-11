@@ -15,7 +15,7 @@ namespace Orientation_Api.Controllers
 
     public class CustomerController : ApiController
     {
-    //-------------------------------------------------------------------------
+
         // GET api/<controller>
         [HttpGet, Route("")]
         public HttpResponseMessage Get()
@@ -34,19 +34,28 @@ namespace Orientation_Api.Controllers
             }
         }
 
-     //-------------------------------------------------------------------------
+
         // GET api/<controller>/5    
         public string Get(int id)
         {
             return "value";
         }
-
-    //--------------------------------------------------------------------------
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+         // POST api/<controller>
+        [HttpPost, Route("NewCustomer")]
+        public HttpResponseMessage AddNewCustomer(Customer customer)
         {
+            try
+            {
+                var customerDataAccess = new CustomerDataAccess();
+                var affectedRows = customerDataAccess.NewCustomer(customer);
+                return Request.CreateResponse(HttpStatusCode.Created, "New Customer Added!");
+            }
+            catch
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Could not add new customer.");
+            }
         }
-    //--------------------------------------------------------------------------
+
         // change the customer state to InActive
         // PUT api/<controller>/5
         [HttpPut, Route("InActive/{Id}")]
@@ -92,6 +101,7 @@ namespace Orientation_Api.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, $"Customer with the Id {Id} is Now Active");
                 }
             }
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
