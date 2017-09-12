@@ -95,6 +95,7 @@ namespace WebApplication1.DataAccess
     {
         List<T> GetAll();
         void Update(T customer);
+	void Add(T customer);
         bool InactivateCustomer(int entityToUpdate);
 	}
 }
