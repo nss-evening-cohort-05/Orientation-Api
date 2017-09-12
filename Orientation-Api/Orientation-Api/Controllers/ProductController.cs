@@ -1,9 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Dapper;
+using Orientation_Api.DataAccess;
+using Orientation_Api.Models;
 
 namespace Orientation_Api.Controllers
 {
@@ -11,9 +15,21 @@ namespace Orientation_Api.Controllers
     public class ProductController : ApiController
     {
         // GET: api/Product
-        public IEnumerable<string> Get()
+        [HttpGet, Route("")]
+        public HttpResponseMessage Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var ProductData = new ProductDatabase();
+                var AllProductList = ProductData.GetAllProducts();
+                return Request.CreateResponse(HttpStatusCode.OK, AllProductList);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
         }
 
         // GET: api/Product/5

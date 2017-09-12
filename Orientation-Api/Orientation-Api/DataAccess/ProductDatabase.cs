@@ -1,0 +1,58 @@
+﻿using Orientation_Api.Models;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using Dapper;
+
+namespace Orientation_Api.DataAccess
+{
+    public class ProductDatabase
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString;
+
+        //get all the product data
+        public List<Product> GetAllProducts()
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                Connection.Open();
+                var result = Connection.Query<Product>("select * from Product");
+                return result.ToList();
+            }
+        }
+
+        public int newProduct(Product product)
+        {
+            var sql = @"INSERT INTO [dbo].[Product]
+                                   (ProductName
+                                   ,ProductPrice
+                                   ,ProductDescription
+                                   ,Inventory)
+                             VALUES
+                                   (@ProductName
+                                   ,@ProductPrice
+                                   ,@ProductDescription
+                                   ,@Inventory)";
+
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+
+                return connection.Execute(sql, new
+                {
+                    ProductName = product.ProductName
+                   ,
+                    ProductPrice = product.ProductPrice
+                   ,
+                    ProductDescription = product.ProductDescription
+                   ,
+                    Inventory = product.Inventory
+                });
+
+            }
+        }
+    }
+}
