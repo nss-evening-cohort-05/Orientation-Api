@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -12,8 +12,8 @@ using Dapper;
 
 namespace WebApplication1.Controllers
 {
-    [RoutePrefix("api/customer")]
-    public class CustomerController : ApiController
+	[RoutePrefix("api/customer")]
+	public class CustomerController : ApiController
     {
         //customers
         [HttpGet, Route("all")]
@@ -28,30 +28,10 @@ namespace WebApplication1.Controllers
             }
             catch (Exception)
             {
-		return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query didn't work ...");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query didn't work ...");
             }
         }
-        [HttpPut, Route("add")]
-        public HttpResponseMessage Post(CustomerListResult customer)
-        {
-            using (var connection =
-                new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
-            {
-                try
-                {
-                    var customerData = new CustomerDataAccess();
-                    //customerData.Add(customer);
-                    return Request.CreateResponse(HttpStatusCode.Accepted);
-
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
-
-                }
-            }
-        }
-        [HttpPut, Route("edit")]
+		[HttpPut, Route("edit")]
 		public HttpResponseMessage Put(CustomerListResult customer)
 		{
 			using (var connection =
@@ -71,13 +51,14 @@ namespace WebApplication1.Controllers
 				}
 			}
 		}
-        // PUT api/values/5
+		        	
+	// PUT api/values/5
         [HttpPut, Route("{id}")]
         public HttpResponseMessage InactivateCustomer(int id)
         {
             var customerDataAccess = new CustomerDataAccess();
             var MakeInactive = customerDataAccess.InactivateCustomer(id);
-           
+            
             if(MakeInactive)
                 return Request.CreateResponse(HttpStatusCode.OK);
             else
