@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
 		return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query didn't work ...");
             }
         }
-        [HttpPut, Route("add")]
+        [HttpPost, Route("add")]
         public HttpResponseMessage Post(CustomerListResult customer)
         {
             using (var connection =
@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
                 try
                 {
                     var customerData = new CustomerDataAccess();
-                    //customerData.Add(customer);
+                    customerData.Add(customer);
                     return Request.CreateResponse(HttpStatusCode.Accepted);
 
                 }

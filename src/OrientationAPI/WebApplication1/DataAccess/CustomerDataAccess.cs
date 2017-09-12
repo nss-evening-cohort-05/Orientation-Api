@@ -39,12 +39,20 @@ namespace WebApplication1.DataAccess
                 connection.Open();
 
                 var result = connection.QueryFirstOrDefault<CustomerListResult>(
-                    "INSERT into Customer @customer",
+                    "INSERT into Customer (FirstName,LastName,Active,PhoneNumber,EmailAddress,Address1,Address2,City,State,ZipCode)" +
+                    "Values(@Firstname,@LastName,@Active,@PhoneNumber,@EmailAddress,@Address1,@Address2,@City,@State,@ZipCode)",
                     new
                     {
-                        id = customer.CustomerId,
-                        firstName = customer.FirstName,
-                        lastName = customer.LastName
+                        FirstName = customer.FirstName,
+                        LastName = customer.LastName,
+                        Active = customer.Active,
+                        PhoneNumber = customer.PhoneNumber,
+                        EmailAddress = customer.EmailAddress,
+                        Address1 = customer.Address1,
+                        Address2 = customer.Address2,
+                        City = customer.City,
+                        State = customer.State,
+                        ZipCode = customer.ZipCode
                     });
 
             }
@@ -66,10 +74,7 @@ namespace WebApplication1.DataAccess
 
             }
         }
-        {
-
-            }
-        }
+ 
         public void Update(CustomerListResult customer)
 			{
 				using (var connection =
@@ -89,6 +94,7 @@ namespace WebApplication1.DataAccess
     public interface IRepository<T>
     {
         List<T> GetAll();
+        void Update(T customer);
         bool InactivateCustomer(int entityToUpdate);
 	}
 }
