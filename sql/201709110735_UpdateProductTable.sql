@@ -1,2 +1,2 @@
 alter table Product
-add CurrentInventory int
+add OutOfStock bit
