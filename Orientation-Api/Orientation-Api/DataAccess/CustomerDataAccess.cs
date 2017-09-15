@@ -33,7 +33,8 @@ namespace Orientation_Api.DataAccess
                 return Result;
              }
         }
-        //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
         //update the customer state to be Active by passing the customerId
         public int CustomerActive(int CustomerId)
         {
@@ -45,14 +46,13 @@ namespace Orientation_Api.DataAccess
             }
 
         }
-        //--------------------------------------------------------------------------
-
+    //--------------------------------------------------------------------------
+        //update Customer lastName
         public int CustomerUpdateLastName(int CustomerId, string LastName)
         {
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
             {
                 connection.Open();
-
 
                return connection.Execute("update Customer " +
                                                 "set LastName = @LastName " +
@@ -62,7 +62,8 @@ namespace Orientation_Api.DataAccess
             }
         }
 
-        //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+        //adding new customer
         public int NewCustomer(Customer customer)
         {
             using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
