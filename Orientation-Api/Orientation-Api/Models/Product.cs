@@ -12,5 +12,6 @@ namespace Orientation_Api.Models
         public decimal ProductPrice { get; set; }
         public string ProductDescription { get; set; }
         public int Inventory { get; set; }
+        public bool Stock { get; set; }
     }
 }
