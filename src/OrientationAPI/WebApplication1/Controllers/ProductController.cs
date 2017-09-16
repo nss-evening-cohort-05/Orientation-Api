@@ -36,7 +36,7 @@ namespace WebApplication1.Controllers
         {
             throw new NotImplementedException();
         }
-		[HttpGet, Route("status")]
+		[HttpGet, Route("status/{id}")]
 		public HttpResponseMessage GetProductStatus(int id)
 		{
 			using (var connection =
