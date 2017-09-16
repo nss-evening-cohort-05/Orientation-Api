@@ -13,6 +13,16 @@ namespace Orientation_Api.DataAccess
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString;
 
+        //get all the product data
+        public List<Product> GetAllProducts()
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                Connection.Open();
+                var result = Connection.Query<Product>("select * from Product where Product.Stock = 1");
+                return result.ToList();
+            }
+        }
         public int newProduct(Product product)
         {
             var sql = @"INSERT INTO [dbo].[Product]
@@ -25,7 +35,7 @@ namespace Orientation_Api.DataAccess
                                    (@ProductName
                                    ,@ProductPrice
                                    ,@ProductDescription
-                                   ,@Invetory
+                                   ,@Inventory
                                    ,@Stock)";
 
 
@@ -38,7 +48,7 @@ namespace Orientation_Api.DataAccess
                    ,
                     ProductPrice = product.ProductPrice
                    ,
-                    ProductDescrition = product.ProductDescription
+                    ProductDescription = product.ProductDescription
                    ,
                     Inventory = product.Inventory
                    ,
@@ -62,5 +72,3 @@ namespace Orientation_Api.DataAccess
         }
     }
 }
-
-
