@@ -1,4 +1,8 @@
-﻿using System;
+
+using Orientation_Api.DataAccess;
+using Orientation_Api.Models;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,6 +18,7 @@ namespace Orientation_Api.Controllers
     [RoutePrefix("api/Product")]
     public class ProductController : ApiController
     {
+
         // GET: api/Product
         [HttpGet, Route("")]
         public HttpResponseMessage Get()
@@ -37,21 +42,50 @@ namespace Orientation_Api.Controllers
         {
             return "value";
         }
-
-        // POST: api/Product
+        // POST: Add new product  Route: api/Product/newProduct 
         [HttpPost, Route("newProduct")]
-        public void Post([FromBody]string value)
+        public HttpResponseMessage AddNewProduct(Product product)
         {
+            try
+            {
+                var productDatabase = new ProductDatabase();
+                if (productDatabase.newProduct(product) > 0)
+                    return Request.CreateResponse(HttpStatusCode.OK, "New product added");
+                else
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Error add new product"); 
+            }
+            catch (Exception ex)
+            {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Error add new product");
+            }
+
         }
 
-        // PUT: api/Product/5
-        public void Put(int id, [FromBody]string value)
+        // PUT: api/Product
+        [HttpPut, Route("Stock/{Id}")]
+        public HttpResponseMessage Put(int Id)
         {
-        }
+            try
+            {
+                var productDatabase = new ProductDatabase();
+                var ZeroStock = productDatabase.ProductStock(Id);
+                if (ZeroStock == 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, $"Product with the ProductId {Id} was not found");
+                }
+                else 
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, $"Product with the ProductId {Id} is in Stock");
 
-        // DELETE: api/Product/5
-        public void Delete(int id)
-        {
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
         }
     }
 }

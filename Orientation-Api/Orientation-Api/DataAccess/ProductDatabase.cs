@@ -12,30 +12,30 @@ namespace Orientation_Api.DataAccess
     public class ProductDatabase
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString;
-
         //get all the product data
         public List<Product> GetAllProducts()
         {
             using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
             {
                 Connection.Open();
-                var result = Connection.Query<Product>("select * from Product");
+                var result = Connection.Query<Product>("select * from Product where Product.Stock = 1");
                 return result.ToList();
             }
         }
-
         public int newProduct(Product product)
         {
             var sql = @"INSERT INTO [dbo].[Product]
                                    (ProductName
                                    ,ProductPrice
                                    ,ProductDescription
-                                   ,Inventory)
+                                   ,Inventory
+                                   ,Stock)
                              VALUES
                                    (@ProductName
                                    ,@ProductPrice
                                    ,@ProductDescription
-                                   ,@Inventory)";
+                                   ,@Inventory
+                                   ,@Stock)";
 
 
             using (var connection = new SqlConnection(connectionString))
@@ -50,8 +50,23 @@ namespace Orientation_Api.DataAccess
                     ProductDescription = product.ProductDescription
                    ,
                     Inventory = product.Inventory
+                   ,
+                    Stock = product.Stock
                 });
 
+            }
+        }
+
+        public int ProductStock(int ProductId)
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                Connection.Open();
+                var ReturnValue =  Connection.ExecuteScalar<int>("update Product set Stock = ( Case Stock When 'true' Then 'false' " +
+                    "                           When 'false' Then 'true' End)" +
+                    "                           OUTPUT inserted.Stock" +
+                    "                           Where ProductId = ProductId");
+                return ReturnValue;
             }
         }
     }
