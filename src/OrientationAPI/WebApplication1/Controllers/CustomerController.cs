@@ -60,7 +60,7 @@ namespace WebApplication1.Controllers
 				try
 				{
 					var customerData = new CustomerDataAccess();
-					customerData.Update(customer);
+					customerData.Update(customer) ;
 					return Request.CreateResponse(HttpStatusCode.Accepted);
 
 				}
