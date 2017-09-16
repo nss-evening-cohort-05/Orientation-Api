@@ -4,6 +4,9 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 using Dapper;
 using WebApplication1.Models;
 
@@ -13,7 +16,17 @@ namespace WebApplication1.DataAccess
     {
         public List<ProductListResult> GetAllProducts()
         {
-            throw new NotImplementedException();
+
+            using (var connection =
+                    new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                connection.Open();
+
+                var result = connection.Query<ProductListResult>
+                                              ("select * from Product");
+
+                return result.ToList();
+            }
         }
 
         public List<ProductListResult> CreateProduct()
