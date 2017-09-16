@@ -12,7 +12,6 @@ namespace Orientation_Api.DataAccess
     public class ProductDatabase
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString;
-
         //get all the product data
         public List<Product> GetAllProducts()
         {

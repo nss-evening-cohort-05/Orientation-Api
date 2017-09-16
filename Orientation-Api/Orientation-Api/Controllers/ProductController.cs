@@ -1,4 +1,5 @@
 using Orientation_Api.DataAccess;
+using Orientation_Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,6 +17,7 @@ namespace Orientation_Api.Controllers
     [RoutePrefix("api/Product")]
     public class ProductController : ApiController
     {
+
         // GET: api/Product
         [HttpGet, Route("")]
         public HttpResponseMessage Get()
@@ -49,12 +51,11 @@ namespace Orientation_Api.Controllers
                 if (productDatabase.newProduct(product) > 0)
                     return Request.CreateResponse(HttpStatusCode.OK, "New product added");
                 else
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Error add new product");
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Error add new product"); 
             }
             catch (Exception ex)
             {
-
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Server Error", ex);
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Error add new product");
             }
 
         }
