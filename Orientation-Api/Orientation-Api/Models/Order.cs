@@ -12,6 +12,6 @@ namespace Orientation_Api.Models
         public DateTime OrderDate { get; set; }
         public Decimal TotalPrice { get; set; }
         public Boolean Paid { get; set; }
-
+        public List <LineItem> OrderLine { get; set; }
     }
 }

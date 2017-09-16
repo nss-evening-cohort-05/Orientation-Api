@@ -72,23 +72,41 @@ namespace Orientation_Api.Controllers
 
         }
 
-
+//-------------------------------------------------------------------------------------------------
         // POST(Add new order), route: api/Order/neworder
-        [HttpPost, Route("neworder")]
+        [HttpPost, Route("Createorder")]
         public HttpResponseMessage AddOrder(Order order )
         {
             try
             {
                 var orderDataAccess = new OrderDatabase();
-                var rowAddCnt = orderDataAccess.newOrder(order);
-                return Request.CreateResponse(HttpStatusCode.Created, "New order Added");
+               var orderLine = new OrderLineDataAccess();
+                var orderId = orderDataAccess.newOrder(order);
+                return Request.CreateResponse(HttpStatusCode.Created, $"New order was created , orderID: {orderId}");
             }
-            catch
+            catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Query Error ", ex);
             }
         }
 
+//--------------------------------------------------------------------------
+        //post an orderLine with multiple products
+        [HttpPost, Route("OrderLine")]
+        public HttpResponseMessage CreateOrderLine(List <LineItem> lineitem)
+        {
+            try
+            {
+                var order = new OrderLineDataAccess();
+                var addedrows = order.CreateOrderLine(lineitem);
+                return Request.CreateResponse(HttpStatusCode.Created, $" {addedrows}  order Line was just created ");
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "sorry !!cannot creat the order for some reason ");
+            }
+        }
+//------------------------------------------------------------------
         // PUT: api/Order/5
         //[HttpPut, Route("{}")]
         public void UpdateOrder()

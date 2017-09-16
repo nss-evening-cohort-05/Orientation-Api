@@ -9,38 +9,52 @@ using Dapper;
 
 namespace Orientation_Api.DataAccess
 {
-    public class OrderDatabase 
+    public class OrderDatabase
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString;
 
-        public int newOrder (Order order)
+//----------------------------------------------------------------------------------
+        //creating new order and return the order id 
+        //and use the order id for creating the order for multiple products
+        public int newOrder(Order order)
         {
-             var sql = @"Insert into [dbo].[Order]
-                                (CustomerId
-                                ,OrderDate
-                                ,TotalPrice
-                                ,Paid
-                                )
-                                values
-                                (@customerId
-                                ,CURRENT_TIMESTAMP
-                                ,@totalPrice
-                                ,@paid)";
+            var sql = @"Insert into [dbo].[Order]
+                               (CustomerId
+                               ,OrderDate
+                               ,TotalPrice
+                               ,Paid
+                               )
+                               values
+                               (@customerId
+                               ,CURRENT_TIMESTAMP
+                               ,0
+                               ,@paid)
+                     select Cast(Scope_Identity() as int)";
 
+            var sqlLine = @"INSERT INTO [dbo].[LineItem]
+                              ([ProductId]
+                              ,[OrderId]
+                              ,[Quantity])
+                        VALUES
+                              (@productId
+                              ,@orderID
+                              ,@quantity)";
 
             using (var connection = new SqlConnection(connectionString))
             {
-
-                var rowsInsert = connection.Execute(sql, new {customerId = order.CustomerId
-                                                            , totalPrice = order.TotalPrice
-                                                            , paid       = order.Paid
-                                                              });
-
-                return rowsInsert;
-
+                //execute sql command to get Order Id
+                var orderId = connection.ExecuteScalar<int>(sql, 
+                    new {customerId = order.CustomerId, paid = order.Paid});
+                //loop through each OrderLine and pass the order id 
+                foreach (var item in order.OrderLine)
+                {
+                    connection.Execute(sqlLine, new { item.ProductId, orderID = orderId, item.Quantity });
+                }
+                return orderId;
             }
         }
 
+//-----------------------------------------------------------------------
         public Order viewOrder(int orderId)
         {
             var sqlOrder = @"SELECT OrderId
@@ -56,7 +70,8 @@ namespace Orientation_Api.DataAccess
                 return connection.Query<Order>(sqlOrder, new { orderId = orderId }).FirstOrDefault();
             }
         }
-
+//--------------------------------------------------------------------------------------------
+    //list of orders
         public List<Order> listOrder()
         {
             var sqlOrder = @"SELECT OrderId
@@ -72,6 +87,8 @@ namespace Orientation_Api.DataAccess
             }
         }
 
+//----------------------------------------------------------------------------------------------------
+    //list of unpaied orders
         public List<Order> outstandingOrders()
         {
             var sqlOrder = @"SELECT OrderId
@@ -89,3 +106,6 @@ namespace Orientation_Api.DataAccess
         }
     }
 }
+
+
+        
