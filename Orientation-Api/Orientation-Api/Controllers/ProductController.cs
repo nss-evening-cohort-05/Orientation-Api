@@ -1,4 +1,6 @@
-﻿using System;
+using Orientation_Api.DataAccess;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
@@ -57,14 +59,31 @@ namespace Orientation_Api.Controllers
 
         }
 
-        // PUT: api/Product/5
-        public void Put(int id, [FromBody]string value)
+        // PUT: api/Product
+        [HttpPut, Route("Stock/{Id}")]
+        public HttpResponseMessage Put(int Id)
         {
-        }
+            try
+            {
+                var productDatabase = new ProductDatabase();
+                var ZeroStock = productDatabase.ProductStock(Id);
+                if (ZeroStock == 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, $"Product with the ProductId {Id} was not found");
+                }
+                else 
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, $"Product with the ProductId {Id} is in Stock");
 
-        // DELETE: api/Product/5
-        public void Delete(int id)
-        {
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
         }
     }
 }
