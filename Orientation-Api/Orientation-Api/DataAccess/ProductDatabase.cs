@@ -22,7 +22,6 @@ namespace Orientation_Api.DataAccess
                 return result.ToList();
             }
         }
-
         public int newProduct(Product product)
         {
             var sql = @"INSERT INTO [dbo].[Product]
@@ -55,6 +54,19 @@ namespace Orientation_Api.DataAccess
                     Stock = product.Stock
                 });
 
+            }
+        }
+
+        public int ProductStock(int ProductId)
+        {
+            using (var Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Bangazon"].ConnectionString))
+            {
+                Connection.Open();
+                var ReturnValue =  Connection.ExecuteScalar<int>("update Product set Stock = ( Case Stock When 'true' Then 'false' " +
+                    "                           When 'false' Then 'true' End)" +
+                    "                           OUTPUT inserted.Stock" +
+                    "                           Where ProductId = ProductId");
+                return ReturnValue;
             }
         }
     }

@@ -1,4 +1,3 @@
-
 using Orientation_Api.DataAccess;
 using Orientation_Api.Models;
 using System;
@@ -60,6 +59,32 @@ namespace Orientation_Api.Controllers
             }
 
         }
-               
+
+        // PUT: api/Product
+        [HttpPut, Route("Stock/{Id}")]
+        public HttpResponseMessage Put(int Id)
+        {
+            try
+            {
+                var productDatabase = new ProductDatabase();
+                var ZeroStock = productDatabase.ProductStock(Id);
+                if (ZeroStock == 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, $"Product with the ProductId {Id} was not found");
+                }
+                else 
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, $"Product with the ProductId {Id} is in Stock");
+
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
     }
 }
